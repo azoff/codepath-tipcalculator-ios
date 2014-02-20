@@ -15,82 +15,102 @@
 @property (weak, nonatomic) IBOutlet UISegmentedControl *tipSelectionSegment;
 @property (weak, nonatomic) IBOutlet UISlider *tipSelectionSlider;
 @property (weak, nonatomic) IBOutlet UILabel *tipTotalLabel;
-@property (weak, nonatomic) IBOutlet UILabel *tipHelperLabel;
+@property (weak, nonatomic) IBOutlet UILabel *tipTotalHelperLabel;
+@property (weak, nonatomic) IBOutlet UILabel *billTotalLabel;
+@property (weak, nonatomic) IBOutlet UILabel *billTotalHelperLabel;
 
-- (IBAction)onTap:(id)sender;
-- (void)updateValues;
+- (IBAction)onSegmentChanged;
+- (IBAction)onBillAmountChanged;
+- (IBAction)onViewTap:(id)sender;
+- (IBAction)updateValues;
+- (void) animateHelperAlpha:(int)alpha;
+- (void) animateHelperAlpha:(int)alpha withDuration:(float)duration;
 
 @end
 
 @implementation TipViewController
 
-#define SEGMENT_COUNT 3
 NSNumberFormatter *formatter;
-int segments[SEGMENT_COUNT] = {10, 15, 20};
-
-- (id)initWithNibName:(NSString *)nibNameOrNil bundle:(NSBundle *)nibBundleOrNil
-{
-    self = [super initWithNibName:nibNameOrNil bundle:nibBundleOrNil];
-    if (self) {
-        self.title = @"Tip Calc";
-        formatter = [[NSNumberFormatter alloc] init];
-        [formatter setNumberStyle:NSNumberFormatterCurrencyStyle];
-    }
-    return self;
-}
-
-- (void)finalize {
-    free(segments);
-    [super finalize];
-}
+NSArray *segments;
 
 - (void)viewDidLoad
 {
     [super viewDidLoad];
-    // Do any additional setup after loading the view from its nib.
+    
+    formatter = [[NSNumberFormatter alloc] init];
+    [formatter setNumberStyle:NSNumberFormatterCurrencyStyle];
+    
+    segments = @[@(10), @(15), @(20)];
+    
+    [self animateHelperAlpha:0 withDuration:0];
+    
 }
 
 - (void)didReceiveMemoryWarning
 {
+    
+    formatter = nil;
+    segments = nil;
+    
     [super didReceiveMemoryWarning];
-    // Dispose of any resources that can be recreated.
+    
 }
 
-- (void)updateValues
+- (IBAction)updateValues
 {
     // get tip amount, update label
     int tipAmount = self.tipSelectionSlider.value;
     self.tipSelectionLabel.text = [NSString stringWithFormat:@"%u%% Tip", tipAmount];
     
     // update segment selection
-    for (int index=0; index < SEGMENT_COUNT; index++) {
-        if (tipAmount == segments[index]) {
+    self.tipSelectionSegment.selectedSegmentIndex = -1;
+    for (int index=0; index < segments.count; index++) {
+        if (tipAmount == [segments[index] intValue]) {
             self.tipSelectionSegment.selectedSegmentIndex = index;
             break;
         }
     }
     
-    // hide or show the total based off of the bill amount
+    // don't update on invalid values
     float billAmount = [self.billTextField.text floatValue];
-    if (billAmount <= 0) {
-        self.tipTotalLabel.alpha  = 0;
-        self.tipHelperLabel.alpha = 0;
-        return;
-    } else {
-        self.tipTotalLabel.alpha  = 1;
-        self.tipHelperLabel.alpha = 1;
-    }
+    if (billAmount < 0) return;
     
-    // calculate the total
-    NSNumber *total = [[NSNumber alloc] initWithFloat:((tipAmount/100.0)*billAmount)];
-    self.tipTotalLabel.text = [formatter stringFromNumber:total];
+    // calculate tip total
+    float f_tipTotal = tipAmount/100.0*billAmount;
+    NSNumber *tipTotal = [[NSNumber alloc] initWithFloat:f_tipTotal];
+    self.tipTotalLabel.text = [formatter stringFromNumber:tipTotal];
+    
+    // calculate bill total
+    NSNumber *billTotal = [[NSNumber alloc] initWithFloat:(f_tipTotal+billAmount)];
+    self.billTotalLabel.text = [formatter stringFromNumber:billTotal];
     
 }
 
-- (IBAction)onTap:(id)sender
-{
-    [self.view endEditing:YES];
+- (IBAction)onBillAmountChanged {
+    [self animateHelperAlpha:1];
     [self updateValues];
+}
+
+- (IBAction)onSegmentChanged {
+    self.tipSelectionSlider.value = [segments[self.tipSelectionSegment.selectedSegmentIndex] floatValue];
+    [self updateValues];
+}
+
+- (IBAction)onViewTap:(id)sender {
+    [self.view endEditing:YES];
+}
+
+- (void) animateHelperAlpha:(int)alpha {
+    [self animateHelperAlpha:alpha withDuration:0.75];
+}
+
+- (void)animateHelperAlpha:(int)alpha withDuration:(float)duration {
+    [UIView animateWithDuration:duration animations:^(void) {
+        self.tipTotalLabel.alpha  = alpha;
+        self.billTotalLabel.alpha = alpha;
+        self.tipTotalHelperLabel.alpha = alpha;
+        self.billTotalHelperLabel.alpha = alpha;
+    }];
 }
 
 @end
