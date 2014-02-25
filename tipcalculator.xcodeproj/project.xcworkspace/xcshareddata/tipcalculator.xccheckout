@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>61376EC6-C03A-47F0-B86C-1E11D94653E7</string>
+	<key>IDESourceControlProjectName</key>
+	<string>tipcalculator</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>325F7054-D7A9-4C85-A23B-C87E550BAD2F</key>
+		<string>ssh://github.com/azoff/codepath-tipcalculator-ios.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>tipcalculator.xcodeproj/project.xcworkspace</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>325F7054-D7A9-4C85-A23B-C87E550BAD2F</key>
+		<string>../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>ssh://github.com/azoff/codepath-tipcalculator-ios.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>110</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>325F7054-D7A9-4C85-A23B-C87E550BAD2F</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>325F7054-D7A9-4C85-A23B-C87E550BAD2F</string>
+			<key>IDESourceControlWCCName</key>
+			<string>tipcalculator</string>
+		</dict>
+	</array>
+</dict>
+</plist>

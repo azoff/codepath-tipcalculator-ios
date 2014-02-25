@@ -13,15 +13,23 @@
 
 - (BOOL)application:(UIApplication *)application didFinishLaunchingWithOptions:(NSDictionary *)launchOptions
 {
+    
+    [[UIApplication sharedApplication] setStatusBarStyle: UIStatusBarStyleLightContent];
+    
     self.window = [[UIWindow alloc] initWithFrame:[[UIScreen mainScreen] bounds]];
-    
-    TipViewController *vc = [[TipViewController alloc] init];
-    self.window.rootViewController = vc;
-    
-    // Override point for customization after application launch.
-    self.window.backgroundColor = [UIColor whiteColor];
+    self.window.backgroundColor = [UIColor blackColor];
     [self.window makeKeyAndVisible];
+    
+    UINavigationController *root = [[UINavigationController alloc]
+                                    initWithRootViewController:[[TipViewController alloc] init]];
+    root.navigationBar.barTintColor = [UIColor colorWithRed:0.2 green:0.2 blue:0.2 alpha:1.0];
+    root.navigationBar.translucent = NO;
+    root.navigationBar.titleTextAttributes = @{NSForegroundColorAttributeName: [UIColor whiteColor]};
+    
+    self.window.rootViewController = root;
+    
     return YES;
+    
 }
 
 - (void)applicationWillResignActive:(UIApplication *)application
